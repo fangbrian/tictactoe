@@ -35,6 +35,7 @@ public class GameBoard extends Activity {
             "*", "*", "*",
             "*", "*", "*"
     };
+    private boolean mGameOver = false;
 
     private static final int MAX_NUMBER_OF_TURNS = 9;
 
@@ -85,6 +86,7 @@ public class GameBoard extends Activity {
     private void initializeGameBoard() {
         mMessage.setVisibility(View.GONE);
         mRematch.setVisibility(View.GONE);
+        mGameOver = false;
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, mBlocks);
@@ -102,32 +104,34 @@ public class GameBoard extends Activity {
     }
 
     private void processNextMove(int position, TextView textView) {
-        textView.setText("X");
-        mState[position] = "X";
-        mTurns += 1;
-        if (mTurns == MAX_NUMBER_OF_TURNS ) {
-            mMessage.setText("Tie Game");
-            mMessage.setVisibility(View.VISIBLE);
-            endGame();
-        }
-        if (mTurns % 2 == 1 ) {
-            if(mPlayer1.newMove(position)) {
-                //Player 1 Wins
-                mMessage.setText("Player 1 Wins");
+        if (!mGameOver) {
+            textView.setText("X");
+            mState[position] = "X";
+            mTurns += 1;
+            if (mTurns == MAX_NUMBER_OF_TURNS) {
+                mMessage.setText("Tie Game");
                 mMessage.setVisibility(View.VISIBLE);
                 endGame();
-            } else {
-                mComputerMove = new ComputerMove(mState);
-                position = mComputerMove.getNextMove();
-                mState[position] = "O";
-                ((TextView) mGridView.getChildAt(position)).setText("O");
-                mTurns += 1;
-                if(mPlayer2.newMove(position)) {
-                    //Player 2 Wins
-                    Log.d("****", "PLAYER 2 WINS");
-                    mMessage.setText("Player 2 Wins");
+            }
+            if (mTurns % 2 == 1) {
+                if (mPlayer1.newMove(position)) {
+                    //Player 1 Wins
+                    mMessage.setText("Player 1 Wins");
                     mMessage.setVisibility(View.VISIBLE);
                     endGame();
+                } else {
+                    mComputerMove = new ComputerMove(mState);
+                    position = mComputerMove.getNextMove();
+                    mState[position] = "O";
+                    ((TextView) mGridView.getChildAt(position)).setText("O");
+                    mTurns += 1;
+                    if (mPlayer2.newMove(position)) {
+                        //Player 2 Wins
+                        Log.d("****", "PLAYER 2 WINS");
+                        mMessage.setText("Player 2 Wins");
+                        mMessage.setVisibility(View.VISIBLE);
+                        endGame();
+                    }
                 }
             }
         }
@@ -139,6 +143,7 @@ public class GameBoard extends Activity {
         mPlayer1.resetParameters();
         mPlayer2.resetParameters();
         mRematch.setVisibility(View.VISIBLE);
+        mGameOver = true;
         mState = new String[] {
                 "*", "*", "*",
                 "*", "*", "*",
