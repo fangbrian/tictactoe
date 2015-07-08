@@ -21,9 +21,16 @@ public class GameBoard extends Activity {
     private PlayerState mPlayer1 = new PlayerState();
     private PlayerState mPlayer2 = new PlayerState();
     private TextView mMessage;
-    private TextView mReplay;
+    private TextView mRematch;
     private int mTurns = 0;
     private final String[] mBlocks = new String[] {
+            "*", "*", "*",
+            "*", "*", "*",
+            "*", "*", "*"
+    };
+
+    private ComputerMove mComputerMove;
+    private String[] mState = new String[] {
             "*", "*", "*",
             "*", "*", "*",
             "*", "*", "*"
@@ -38,7 +45,7 @@ public class GameBoard extends Activity {
 
         mGridView = (GridView) findViewById(R.id.gridview);
         mMessage = (TextView) findViewById(R.id.message);
-        mReplay = (TextView) findViewById(R.id.replay);
+        mRematch = (TextView) findViewById(R.id.rematch);
 
         setRematchListener();
         initializeGameBoard();
@@ -67,7 +74,7 @@ public class GameBoard extends Activity {
     }
 
     private void setRematchListener() {
-        mReplay.setOnClickListener(new View.OnClickListener(){
+        mRematch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 initializeGameBoard();
@@ -77,7 +84,7 @@ public class GameBoard extends Activity {
 
     private void initializeGameBoard() {
         mMessage.setVisibility(View.GONE);
-        mReplay.setVisibility(View.GONE);
+        mRematch.setVisibility(View.GONE);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, mBlocks);
@@ -87,7 +94,7 @@ public class GameBoard extends Activity {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                
+
                 processNextMove(position, ((TextView) v));
             }
 
@@ -95,26 +102,33 @@ public class GameBoard extends Activity {
     }
 
     private void processNextMove(int position, TextView textView) {
+        textView.setText("X");
+        mState[position] = "X";
         mTurns += 1;
-        if (mTurns == MAX_NUMBER_OF_TURNS ) endGame();
+        if (mTurns == MAX_NUMBER_OF_TURNS ) {
+            mMessage.setText("Tie Game");
+            mMessage.setVisibility(View.VISIBLE);
+            endGame();
+        }
         if (mTurns % 2 == 1 ) {
-            textView.setText("X");
             if(mPlayer1.newMove(position)) {
                 //Player 1 Wins
-                Log.d("****", "Player 1 WINS");
                 mMessage.setText("Player 1 Wins");
                 mMessage.setVisibility(View.VISIBLE);
                 endGame();
-            }
-        }
-        else {
-            textView.setText("O");
-            if(mPlayer2.newMove(position)) {
-                //Player 2 Wins
-                Log.d("****", "PLAYER 2 WINS");
-                mMessage.setText("Player 2 Wins");
-                mMessage.setVisibility(View.VISIBLE);
-                endGame();
+            } else {
+                mComputerMove = new ComputerMove(mState);
+                position = mComputerMove.getNextMove();
+                mState[position] = "O";
+                ((TextView) mGridView.getChildAt(position)).setText("O");
+                mTurns += 1;
+                if(mPlayer2.newMove(position)) {
+                    //Player 2 Wins
+                    Log.d("****", "PLAYER 2 WINS");
+                    mMessage.setText("Player 2 Wins");
+                    mMessage.setVisibility(View.VISIBLE);
+                    endGame();
+                }
             }
         }
     }
@@ -124,7 +138,12 @@ public class GameBoard extends Activity {
         mTurns = 0;
         mPlayer1.resetParameters();
         mPlayer2.resetParameters();
-        mReplay.setVisibility(View.VISIBLE);
+        mRematch.setVisibility(View.VISIBLE);
+        mState = new String[] {
+                "*", "*", "*",
+                "*", "*", "*",
+                "*", "*", "*"
+        };
     }
 
 }

@@ -12,6 +12,7 @@ public class PlayerState {
     private int mCol2;
     private int mDiag0;
     private int mDiag1;
+    private boolean mWin = false;
 
     public PlayerState() {
         mRow0 = mRow1 = mRow2 = mCol0 = mCol1 = mCol2 = mDiag0 = mDiag1 = 0;
@@ -24,52 +25,79 @@ public class PlayerState {
                 mRow0 += 1;
                 mCol0 += 1;
                 mDiag0 += 1;
-                if (mRow0 >= 3 || mCol0 >= 3 || mDiag0 >= 3) return true;
+                if (mRow0 >= 3 || mCol0 >= 3 || mDiag0 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             case 1:
                 mRow0 += 1;
                 mCol1 += 1;
-                if (mRow0 >= 3 || mCol1 >= 3) return true;
+                if (mRow0 >= 3 || mCol1 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             case 2:
                 mRow0 += 1;
                 mCol2 += 1;
                 mDiag1 += 1;
-                if (mRow0 >= 3 || mCol2 >= 3 || mDiag1 >= 3) return true;
+                if (mRow0 >= 3 || mCol2 >= 3 || mDiag1 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             case 3:
                 mRow1 += 1;
                 mCol0 += 1;
-                if (mRow1 >= 3 || mCol0 >= 3) return true;
+                if (mRow1 >= 3 || mCol0 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             case 4:
                 mRow1 += 1;
                 mCol1 += 1;
                 mDiag0 += 1;
                 mDiag1 += 1;
-                if (mRow1 >= 3 || mCol1 >= 3 || mDiag0 >= 3 || mDiag1 >= 3) return true;
+                if (mRow1 >= 3 || mCol1 >= 3 || mDiag0 >= 3 || mDiag1 >= 3) {
+                    mWin = true;
+                   return true;
+                }
                 break;
             case 5:
                 mRow1 += 1;
                 mCol2 += 1;
-                if (mRow1 >= 3 || mCol2 >= 3) return true;
+                if (mRow1 >= 3 || mCol2 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             case 6:
                 mRow2 += 1;
                 mCol0 += 1;
                 mDiag1 += 1;
-                if (mRow2 >= 3 || mCol0 >= 3 || mDiag1 >= 3) return true;
+                if (mRow2 >= 3 || mCol0 >= 3 || mDiag1 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             case 7:
                 mRow2 += 1;
                 mCol1 += 1;
-                if (mRow2 >= 3 || mCol1 >= 3) return true;
+                if (mRow2 >= 3 || mCol1 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             case 8:
                 mRow2 += 1;
                 mCol2 += 1;
                 mDiag0 += 1;
-                if (mRow2 >= 3 || mCol2 >= 3 || mDiag0 >= 3) return true;
+                if (mRow2 >= 3 || mCol2 >= 3 || mDiag0 >= 3) {
+                    mWin = true;
+                    return true;
+                }
                 break;
             default:
                 return false;
@@ -79,5 +107,9 @@ public class PlayerState {
 
     public void resetParameters() {
         mRow0 = mRow1 = mRow2 = mCol0 = mCol1 = mCol2 = mDiag0 = mDiag1 = 0;
+    }
+
+    public boolean isWinner() {
+        return mWin;
     }
 }

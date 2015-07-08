@@ -34,7 +34,7 @@
         android:background="#0f0"
         android:gravity="center"
         android:textColor="#000"
-        android:id="@+id/replay"
+        android:id="@+id/rematch"
         android:layout_width="wrap_content"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
