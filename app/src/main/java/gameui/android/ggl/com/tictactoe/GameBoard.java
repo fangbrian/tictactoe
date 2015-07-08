@@ -27,13 +27,20 @@ public class GameBoard extends Activity {
             "*", "*", "*"
     };
 
+    private static final int MAX_NUMBER_OF_TURNS = 9;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_board);
 
         mGridView = (GridView) findViewById(R.id.gridview);
+        initializeGameBoard();
 
+
+    }
+
+    private void initializeGameBoard() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, mBlocks);
 
@@ -76,11 +83,13 @@ public class GameBoard extends Activity {
 
     private void processNextMove(int position, TextView textView) {
         mTurns += 1;
+        if (mTurns == MAX_NUMBER_OF_TURNS ) endGame();
         if (mTurns % 2 == 1 ) {
             textView.setText("X");
             if(mPlayer1.newMove(position)) {
                 //Player 1 Wins
                 Log.d("****", "Player 1 WINS");
+                endGame();
             }
         }
         else {
@@ -88,8 +97,17 @@ public class GameBoard extends Activity {
             if(mPlayer2.newMove(position)) {
                 //Player 2 Wins
                 Log.d("****", "PLAYER 2 WINS");
+                endGame();
             }
         }
+    }
+
+    private void endGame() {
+        //Reset Parameters
+        mTurns = 0;
+        mPlayer1.resetParameters();
+        mPlayer2.resetParameters();
+        initializeGameBoard();
     }
 
 }

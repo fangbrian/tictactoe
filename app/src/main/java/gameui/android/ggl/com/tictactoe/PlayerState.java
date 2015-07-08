@@ -76,4 +76,8 @@ public class PlayerState {
         }
         return false;
     }
+
+    public void resetParameters() {
+        mRow0 = mRow1 = mRow2 = mCol0 = mCol1 = mCol2 = mDiag0 = mDiag1 = 0;
+    }
 }
