@@ -104,7 +104,7 @@ public class GameBoard extends Activity {
     }
 
     private void processNextMove(int position, TextView textView) {
-        if (!mGameOver) {
+        if (!mGameOver && checkValidPosition(position)) {
             textView.setText("X");
             mState[position] = "X";
             mTurns += 1;
@@ -122,19 +122,34 @@ public class GameBoard extends Activity {
                 } else {
                     mComputerMove = new ComputerMove(mState);
                     position = mComputerMove.getNextMove();
-                    mState[position] = "O";
-                    ((TextView) mGridView.getChildAt(position)).setText("O");
-                    mTurns += 1;
-                    if (mPlayer2.newMove(position)) {
-                        //Player 2 Wins
-                        Log.d("****", "PLAYER 2 WINS");
-                        mMessage.setText("Player 2 Wins");
-                        mMessage.setVisibility(View.VISIBLE);
-                        endGame();
+                    if (position < 9 && position >= 0) {
+                        mState[position] = "O";
+                        ((TextView) mGridView.getChildAt(position)).setText("O");
+                        mTurns += 1;
+                        if (mPlayer2.newMove(position)) {
+                            //Player 2 Wins
+                            Log.d("****", "PLAYER 2 WINS");
+                            mMessage.setText("Player 2 Wins");
+                            mMessage.setVisibility(View.VISIBLE);
+                            endGame();
+                        }
+                    }
+                    else {
+                        invalidInput();
                     }
                 }
             }
         }
+    }
+
+    private boolean checkValidPosition(int position) {
+        return mState[position].equals("*");
+    }
+
+    private void invalidInput() {
+        mMessage.setText("Invalid Input");
+        mMessage.setVisibility(View.VISIBLE);
+        endGame();
     }
 
     private void endGame() {

@@ -11,6 +11,11 @@ public class ComputerMove {
             "*", "*", "*",
             "*", "*", "*"
     };
+    private String[] mCleanGameState = new String[] {
+            "*", "*", "*",
+            "*", "*", "*",
+            "*", "*", "*"
+    };
     private PlayerState mPlayer1 = new PlayerState();
     private PlayerState mComputer = new PlayerState();
     private int mTurns = 0;
@@ -20,6 +25,7 @@ public class ComputerMove {
     public ComputerMove(String[] state) {
         for(int i = 0; i < state.length; i++) {
             mGameState[i] = state[i];
+            mCleanGameState[i] = state[i];
         }
 
         initializePlayers();
@@ -42,7 +48,16 @@ public class ComputerMove {
 
     public int getNextMove() {
         maximizeScore(mGameState);
-        return mNextMove;
+        if (verifyNextMove()) {
+            return mNextMove;
+        }
+        else {
+            return findNextAvailable();
+        }
+    }
+
+    private boolean verifyNextMove() {
+        return mCleanGameState[mNextMove].equals("*");
     }
 
     private int maximizeScore(String[] state) {
@@ -92,9 +107,11 @@ public class ComputerMove {
     }
 
     private int findNextAvailable() {
+        //Returns the next available empty slot if maximizing points fails
         int pos = 9;
-        for(int i = 0; i < mGameState.length; i++) {
-            if (mGameState[i].equals("*")) pos = i;
+        for(int i = 0; i < mCleanGameState.length; i++) {
+            if (mCleanGameState[i].equals("*")) pos = i;
+            break;
         }
         return pos;
     }
