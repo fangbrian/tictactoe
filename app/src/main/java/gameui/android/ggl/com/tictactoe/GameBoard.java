@@ -1,28 +1,20 @@
 package gameui.android.ggl.com.tictactoe;
 
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-
-public class MainActivity extends ActionBarActivity {
+/**
+ * Created by fangbrian on 7/8/15.
+ */
+public class GameBoard extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.game_board);
 
-        findViewById(R.id.newGame).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), GameBoard.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
 
@@ -47,4 +39,5 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
