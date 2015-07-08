@@ -20,6 +20,8 @@ public class GameBoard extends Activity {
     private GridView mGridView;
     private PlayerState mPlayer1 = new PlayerState();
     private PlayerState mPlayer2 = new PlayerState();
+    private TextView mMessage;
+    private TextView mReplay;
     private int mTurns = 0;
     private final String[] mBlocks = new String[] {
             "*", "*", "*",
@@ -35,29 +37,12 @@ public class GameBoard extends Activity {
         setContentView(R.layout.game_board);
 
         mGridView = (GridView) findViewById(R.id.gridview);
+        mMessage = (TextView) findViewById(R.id.message);
+        mReplay = (TextView) findViewById(R.id.replay);
+
+        setRematchListener();
         initializeGameBoard();
-
-
     }
-
-    private void initializeGameBoard() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, mBlocks);
-
-        mGridView.setAdapter(adapter);
-
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(getApplicationContext(),
-                        Integer.toString(position), Toast.LENGTH_SHORT).show();
-
-                processNextMove(position, ((TextView) v));
-            }
-
-        });
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,6 +66,34 @@ public class GameBoard extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setRematchListener() {
+        mReplay.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                initializeGameBoard();
+            }
+        });
+    }
+
+    private void initializeGameBoard() {
+        mMessage.setVisibility(View.GONE);
+        mReplay.setVisibility(View.GONE);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, mBlocks);
+
+        mGridView.setAdapter(adapter);
+
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                
+                processNextMove(position, ((TextView) v));
+            }
+
+        });
+    }
+
     private void processNextMove(int position, TextView textView) {
         mTurns += 1;
         if (mTurns == MAX_NUMBER_OF_TURNS ) endGame();
@@ -89,6 +102,8 @@ public class GameBoard extends Activity {
             if(mPlayer1.newMove(position)) {
                 //Player 1 Wins
                 Log.d("****", "Player 1 WINS");
+                mMessage.setText("Player 1 Wins");
+                mMessage.setVisibility(View.VISIBLE);
                 endGame();
             }
         }
@@ -97,6 +112,8 @@ public class GameBoard extends Activity {
             if(mPlayer2.newMove(position)) {
                 //Player 2 Wins
                 Log.d("****", "PLAYER 2 WINS");
+                mMessage.setText("Player 2 Wins");
+                mMessage.setVisibility(View.VISIBLE);
                 endGame();
             }
         }
@@ -107,7 +124,7 @@ public class GameBoard extends Activity {
         mTurns = 0;
         mPlayer1.resetParameters();
         mPlayer2.resetParameters();
-        initializeGameBoard();
+        mReplay.setVisibility(View.VISIBLE);
     }
 
 }
