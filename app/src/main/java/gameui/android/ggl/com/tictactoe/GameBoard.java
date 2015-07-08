@@ -28,7 +28,6 @@ public class GameBoard extends Activity {
             "*", "*", "*",
             "*", "*", "*"
     };
-
     private ComputerMove mComputerMove;
     private String[] mState = new String[] {
             "*", "*", "*",
@@ -38,6 +37,8 @@ public class GameBoard extends Activity {
     private boolean mGameOver = false;
 
     private static final int MAX_NUMBER_OF_TURNS = 9;
+    private static final int POSITION_UPPER_BOUND = 9;
+    private static final int POSITION_LOWER_BOUND = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,25 +121,28 @@ public class GameBoard extends Activity {
                     mMessage.setVisibility(View.VISIBLE);
                     endGame();
                 } else {
-                    mComputerMove = new ComputerMove(mState);
-                    position = mComputerMove.getNextMove();
-                    if (position < 9 && position >= 0) {
-                        mState[position] = "O";
-                        ((TextView) mGridView.getChildAt(position)).setText("O");
-                        mTurns += 1;
-                        if (mPlayer2.newMove(position)) {
-                            //Player 2 Wins
-                            Log.d("****", "PLAYER 2 WINS");
-                            mMessage.setText("Player 2 Wins");
-                            mMessage.setVisibility(View.VISIBLE);
-                            endGame();
-                        }
-                    }
-                    else {
-                        invalidInput();
-                    }
+                    computerTurn(position);
                 }
             }
+        }
+    }
+
+    private void computerTurn(int position) {
+        mComputerMove = new ComputerMove(mState);
+        position = mComputerMove.getNextMove();
+        if (position < POSITION_UPPER_BOUND && position >= POSITION_LOWER_BOUND) {
+            mState[position] = "O";
+            ((TextView) mGridView.getChildAt(position)).setText("O");
+            mTurns += 1;
+            if (mPlayer2.newMove(position)) {
+                //Computer Wins
+                mMessage.setText("Player 2 Wins");
+                mMessage.setVisibility(View.VISIBLE);
+                endGame();
+            }
+        }
+        else {
+            invalidInput();
         }
     }
 
