@@ -3,6 +3,7 @@ package gameui.android.ggl.com.tictactoe;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.internal.widget.AdapterViewCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,9 @@ import android.widget.Toast;
  */
 public class GameBoard extends Activity {
     private GridView mGridView;
+    private PlayerState mPlayer1 = new PlayerState();
+    private PlayerState mPlayer2 = new PlayerState();
+    private int mTurns = 0;
     private final String[] mBlocks = new String[] {
             "*", "*", "*",
             "*", "*", "*",
@@ -39,9 +43,11 @@ public class GameBoard extends Activity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Toast.makeText(getApplicationContext(),
-                        ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+                        Integer.toString(position), Toast.LENGTH_SHORT).show();
 
+                processNextMove(position, ((TextView) v));
             }
+
         });
     }
 
@@ -66,6 +72,24 @@ public class GameBoard extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void processNextMove(int position, TextView textView) {
+        mTurns += 1;
+        if (mTurns % 2 == 1 ) {
+            textView.setText("X");
+            if(mPlayer1.newMove(position)) {
+                //Player 1 Wins
+                Log.d("****", "Player 1 WINS");
+            }
+        }
+        else {
+            textView.setText("O");
+            if(mPlayer2.newMove(position)) {
+                //Player 2 Wins
+                Log.d("****", "PLAYER 2 WINS");
+            }
+        }
     }
 
 }
