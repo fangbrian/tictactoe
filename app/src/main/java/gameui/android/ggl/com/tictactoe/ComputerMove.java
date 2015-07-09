@@ -6,6 +6,7 @@ import android.util.Log;
  * Created by fangbrian on 7/8/15.
  */
 public class ComputerMove {
+    //
     private String[] mGameState = new String[] {
             "*", "*", "*",
             "*", "*", "*",
