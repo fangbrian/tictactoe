@@ -89,24 +89,21 @@ public class GameBoard extends Activity {
         mRematch.setVisibility(View.GONE);
         mGameOver = false;
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, mBlocks);
-
-        mGridView.setAdapter(adapter);
+        mGridView.setAdapter(new BoxAdapter(this, mState));
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-
-                processNextMove(position, ((TextView) v));
+                processNextMove(position);
             }
 
         });
     }
 
-    private void processNextMove(int position, TextView textView) {
+    private void processNextMove(int position) {
         if (!mGameOver && checkValidPosition(position)) {
-            textView.setText("X");
+            //((TextView) view.findViewById(R.id.square)).setText("X");
+            ((TextView) mGridView.getChildAt(position).findViewById(R.id.square)).setText("X");
             mState[position] = "X";
             mTurns += 1;
             if (mTurns == MAX_NUMBER_OF_TURNS) {
@@ -132,7 +129,7 @@ public class GameBoard extends Activity {
         position = mComputerMove.getNextMove();
         if (position < POSITION_UPPER_BOUND && position >= POSITION_LOWER_BOUND) {
             mState[position] = "O";
-            ((TextView) mGridView.getChildAt(position)).setText("O");
+            ((TextView) mGridView.getChildAt(position).findViewById(R.id.square)).setText("O");
             mTurns += 1;
             if (mPlayer2.newMove(position)) {
                 //Computer Wins
