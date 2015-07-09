@@ -35,10 +35,13 @@ public class GameBoard extends Activity {
             "*", "*", "*"
     };
     private boolean mGameOver = false;
+    private String mEnvironment = "Environment";
 
     private static final int MAX_NUMBER_OF_TURNS = 9;
     private static final int POSITION_UPPER_BOUND = 9;
     private static final int POSITION_LOWER_BOUND = 0;
+    private static final String ENVIRONMENT_GAME = "Environment";
+    private static final String PLAYER_VS_PLAYER_GAME = "2Player";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +52,16 @@ public class GameBoard extends Activity {
         mMessage = (TextView) findViewById(R.id.message);
         mRematch = (TextView) findViewById(R.id.rematch);
 
+        getIntentData();
         setRematchListener();
         initializeGameBoard();
+    }
+
+    private void getIntentData() {
+        if (getIntent() != null || getIntent().getExtras() != null) {
+            Log.d("MAIN ACTIVITY **** ", getIntent().getExtras().getString("Mode", ""));
+            mEnvironment = getIntent().getExtras().getString("Mode", "");
+        }
     }
 
     @Override
@@ -101,7 +112,7 @@ public class GameBoard extends Activity {
     }
 
     private void processNextMove(int position) {
-        if (!mGameOver && checkValidPosition(position)) {
+        if (!mGameOver && checkValidPosition(position) && mEnvironment.equals(ENVIRONMENT_GAME)) {
             //((TextView) view.findViewById(R.id.square)).setText("X");
             ((TextView) mGridView.getChildAt(position).findViewById(R.id.square)).setText("X");
             mState[position] = "X";
@@ -119,6 +130,30 @@ public class GameBoard extends Activity {
                     endGame();
                 } else {
                     computerTurn(position);
+                }
+            }
+        }
+        else if (!mGameOver && checkValidPosition(position) && mEnvironment.equals(PLAYER_VS_PLAYER_GAME)) {
+            mTurns += 1;
+            if (mTurns == MAX_NUMBER_OF_TURNS ) endGame();
+            if (mTurns % 2 == 1 ) {
+                ((TextView) mGridView.getChildAt(position).findViewById(R.id.square)).setText("X");
+                if(mPlayer1.newMove(position)) {
+                    //Player 1 Wins
+                    Log.d("****", "Player 1 WINS");
+                    mMessage.setText("Player 1 Wins");
+                    mMessage.setVisibility(View.VISIBLE);
+                    endGame();
+                }
+            }
+            else {
+                ((TextView) mGridView.getChildAt(position).findViewById(R.id.square)).setText("O");
+                if(mPlayer2.newMove(position)) {
+                    //Player 2 Wins
+                    Log.d("****", "PLAYER 2 WINS");
+                    mMessage.setText("Player 2 Wins");
+                    mMessage.setVisibility(View.VISIBLE);
+                    endGame();
                 }
             }
         }

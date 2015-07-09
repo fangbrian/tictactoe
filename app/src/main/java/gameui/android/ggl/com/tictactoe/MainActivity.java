@@ -19,6 +19,17 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), GameBoard.class);
+                intent.putExtra("Mode", "Environment");
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        findViewById(R.id.new2playergame).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), GameBoard.class);
+                intent.putExtra("Mode", "2Player");
                 startActivity(intent);
                 finish();
             }
