@@ -38,7 +38,7 @@ public class BoxAdapter  extends BaseAdapter {
                     .findViewById(R.id.square);
 
 
-            squareView.setText(mState[position]);
+            squareView.setText(" ");
 
 
         } else {

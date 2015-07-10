@@ -121,6 +121,7 @@ public class GameBoard extends Activity {
                 mMessage.setText("Tie Game");
                 mMessage.setVisibility(View.VISIBLE);
                 endGame();
+                return;
             }
             if (mTurns % 2 == 1) {
                 if (mPlayer1.newMove(position)) {
@@ -135,9 +136,9 @@ public class GameBoard extends Activity {
         }
         else if (!mGameOver && checkValidPosition(position) && mEnvironment.equals(PLAYER_VS_PLAYER_GAME)) {
             mTurns += 1;
-            if (mTurns == MAX_NUMBER_OF_TURNS ) endGame();
             if (mTurns % 2 == 1 ) {
                 ((TextView) mGridView.getChildAt(position).findViewById(R.id.square)).setText("X");
+                mState[position] = "X";
                 if(mPlayer1.newMove(position)) {
                     //Player 1 Wins
                     Log.d("****", "Player 1 WINS");
@@ -148,6 +149,7 @@ public class GameBoard extends Activity {
             }
             else {
                 ((TextView) mGridView.getChildAt(position).findViewById(R.id.square)).setText("O");
+                mState[position] = "O";
                 if(mPlayer2.newMove(position)) {
                     //Player 2 Wins
                     Log.d("****", "PLAYER 2 WINS");
@@ -156,6 +158,13 @@ public class GameBoard extends Activity {
                     endGame();
                 }
             }
+            if (mTurns == MAX_NUMBER_OF_TURNS) {
+                mMessage.setText("Tie Game");
+                mMessage.setVisibility(View.VISIBLE);
+                endGame();
+                return;
+            }
+
         }
     }
 
