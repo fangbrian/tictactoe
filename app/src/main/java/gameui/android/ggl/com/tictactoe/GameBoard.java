@@ -1,6 +1,7 @@
 package gameui.android.ggl.com.tictactoe;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.internal.widget.AdapterViewCompat;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class GameBoard extends Activity {
     private PlayerState mPlayer2 = new PlayerState();
     private TextView mMessage;
     private TextView mRematch;
+    private TextView mGoBack;
     private int mTurns = 0;
     private final String[] mBlocks = new String[] {
             "*", "*", "*",
@@ -51,17 +53,12 @@ public class GameBoard extends Activity {
         mGridView = (GridView) findViewById(R.id.gridview);
         mMessage = (TextView) findViewById(R.id.message);
         mRematch = (TextView) findViewById(R.id.rematch);
+        mGoBack = (TextView) findViewById(R.id.back);
 
         getIntentData();
         setRematchListener();
+        setGoBackListener();
         initializeGameBoard();
-    }
-
-    private void getIntentData() {
-        if (getIntent() != null || getIntent().getExtras() != null) {
-            Log.d("MAIN ACTIVITY **** ", getIntent().getExtras().getString("Mode", ""));
-            mEnvironment = getIntent().getExtras().getString("Mode", "");
-        }
     }
 
     @Override
@@ -86,11 +83,28 @@ public class GameBoard extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void getIntentData() {
+        if (getIntent() != null || getIntent().getExtras() != null) {
+            mEnvironment = getIntent().getExtras().getString("Mode", "");
+        }
+    }
+
     private void setRematchListener() {
         mRematch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 initializeGameBoard();
+            }
+        });
+    }
+
+    private void setGoBackListener() {
+        mGoBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

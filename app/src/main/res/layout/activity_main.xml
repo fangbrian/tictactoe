@@ -9,6 +9,16 @@
 
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:text="Select Game Mode:"
+        android:padding="20dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="10dp"
+        />
+
+    <TextView
         android:id="@+id/newGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +32,7 @@
         />
 
     <TextView
-        android:id="@+id/new2playergame"
+        android:id="@+id/newMultiPlayerGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"

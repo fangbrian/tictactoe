@@ -25,7 +25,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        findViewById(R.id.new2playergame).setOnClickListener(new View.OnClickListener(){
+        findViewById(R.id.newMultiPlayerGame).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), GameBoard.class);
